@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core'
+import { Component } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-login-form',
@@ -11,9 +12,12 @@ export class LoginFormComponent {
   title = 'Authentication'
   email = ''
   password = ''
-  @Output() loggedIn = new EventEmitter<void>()
+
+  constructor(
+    private router: Router
+  ) {}
 
   login() {
-    this.loggedIn.emit()
+    this.router.navigateByUrl('/search')
   }
 }
