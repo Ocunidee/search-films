@@ -1,6 +1,7 @@
 import { Component } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
+import { AuthenticationService } from '@services/authentication.service'
 
 @Component({
   selector: 'app-login-form',
@@ -14,10 +15,15 @@ export class LoginFormComponent {
   password = ''
 
   constructor(
-    private router: Router
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   login() {
-    this.router.navigateByUrl('/search')
+    this.authenticationService.login()
+    const postLoginUrl = this.activatedRoute.snapshot.queryParamMap.get('redirectUrl')
+    this.router.navigateByUrl(postLoginUrl ? `/${postLoginUrl}` : '')
+          const postLoginUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl')
   }
 }

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core'
-import { LoginFormComponent } from './components/login-form/login-form.component'
-import { FilmSearchComponent } from './components/film-search/film-search.component'
-import { RouterOutlet } from '@angular/router'
+import { Router, RouterOutlet } from '@angular/router'
+import { AuthenticationService } from '@services/authentication.service'
 
 @Component({
   selector: 'app-root',
@@ -10,9 +9,17 @@ import { RouterOutlet } from '@angular/router'
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  loggedIn = false
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {}
 
-  onLogin(): void {
-    this.loggedIn = true
+  logout(): void {
+    this.authenticationService.logout()
+    this.router.navigateByUrl('/login')
+  }
+
+  get loggedIn(): boolean {
+    return this.authenticationService.loggedIn
   }
 }
