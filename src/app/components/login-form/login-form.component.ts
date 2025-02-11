@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http'
-import { Component } from '@angular/core'
+import { Component, DestroyRef } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoginRequest } from '@models/authentication/login-request'
@@ -20,12 +21,14 @@ export class LoginFormComponent {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private destroyRef: DestroyRef
   ) {}
 
   login() {
     this.errorMessage = ''
     this.authenticationService.login(this.loginRequest)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: response => {
           this.authenticationService.token = response.token
@@ -39,6 +42,7 @@ export class LoginFormComponent {
   register(): void {
     this.errorMessage = ''
     this.authenticationService.register(this.loginRequest)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({ error: errorResponse => this.errorHandler(errorResponse) })
   }
 

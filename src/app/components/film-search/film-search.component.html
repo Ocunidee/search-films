@@ -4,7 +4,7 @@
 </form>
 
 <ul class="films">
-  @for (film of films; track film.title) {
+  @for (film of films | async; track film.title) {
     <app-film [film]="film"></app-film>
   }
 </ul>
