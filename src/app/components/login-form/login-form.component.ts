@@ -1,29 +1,35 @@
 import { HttpErrorResponse } from '@angular/common/http'
-import { Component, DestroyRef } from '@angular/core'
+import { Component, DestroyRef, inject } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { FormsModule } from '@angular/forms'
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoginRequest } from '@models/authentication/login-request'
 import { AuthenticationService } from '@services/authentication.service'
+import { password } from 'app/utils/password.validator'
 
 @Component({
   selector: 'app-login-form',
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss'
 })
 export class LoginFormComponent {
+  fb = inject(NonNullableFormBuilder)
   title = 'Authentication'
-  email = ''
-  password = ''
   errorMessage = ''
+
+  loginForm = this.fb.group({
+    email: ['', Validators.required],
+    password: ['', [Validators.required, password()]]
+  })
 
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
     private activatedRoute: ActivatedRoute,
     private destroyRef: DestroyRef
-  ) {}
+  ) {
+  }
 
   login() {
     this.errorMessage = ''
@@ -51,6 +57,6 @@ export class LoginFormComponent {
   }
 
   get loginRequest(): LoginRequest {
-    return new LoginRequest(this.email, this.password)
+    return new LoginRequest(this.loginForm.controls.email.value, this.loginForm.controls.password.value)
   }
 }
