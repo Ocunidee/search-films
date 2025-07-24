@@ -17,7 +17,7 @@
       <li class="film card">
         <img class="poster" alt="film poster" [src]="film.poster"/>
         <div>
-          <p class="title">{{film.title}}<span class="rating">{{starRating(film.metascore)}}</span></p>
+          <p class="title">{{film.title}}<span class="rating">{{film.metascore | starRating}}</span></p>
           <dl>
             <dt>Release date</dt>
             <dd>{{film.released}}</dd>
