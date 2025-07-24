@@ -1,10 +1,11 @@
 import { Component, signal, WritableSignal } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Film } from '../../models/film'
+import { StarRatingPipe } from '../../pipes/star-rating.pipe'
 
 @Component({
   selector: 'app-login-form',
-  imports: [FormsModule],
+  imports: [FormsModule, StarRatingPipe],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss'
 })
@@ -49,11 +50,5 @@ export class LoginFormComponent {
 
   protected login(): void {
     this.loggedIn.set(true)
-  }
-
-  protected starRating(metascore: string): string {
-    const fullStarNumber = Math.ceil(Number(metascore) / 20)
-
-    return '★'.repeat(fullStarNumber) + '☆'.repeat(5 - fullStarNumber)
   }
 }
