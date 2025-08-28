@@ -126,6 +126,11 @@
     },
     "@schematics/angular:resolver": {
       "typeSeparator": "."
+    },
+    "@schematics/angular": {
+      "component": {
+        "changeDetection": "OnPush"
+      }
     }
   }
 }
