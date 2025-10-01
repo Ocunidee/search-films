@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core'
-import { RouterOutlet } from '@angular/router'
+import { Component, inject, signal } from '@angular/core'
+import { Router, RouterOutlet } from '@angular/router'
+import { AuthenticationService } from './services/authentication.service'
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,13 @@ import { RouterOutlet } from '@angular/router'
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly loggedIn = signal(false)
+  private readonly authenticationService = inject(AuthenticationService)
+  private readonly router = inject(Router)
 
-  protected login(): void {
-    this.loggedIn.set(true)
+  protected readonly loggedIn = this.authenticationService.loggedIn
+
+  protected logout(): void {
+    this.authenticationService.logout()
+    this.router.navigateByUrl('/login')
   }
-
 }
