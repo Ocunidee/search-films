@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-login-form',
@@ -9,12 +10,12 @@ import { FormsModule } from '@angular/forms'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginFormComponent {
+  private readonly router = inject(Router)
   protected readonly title = signal('Authentication')
   protected readonly email = signal('')
   protected readonly password = signal('')
-  protected readonly loggedIn = output<boolean>()
 
   protected login(): void {
-    this.loggedIn.emit(true)
+    this.router.navigateByUrl('/search')
   }
 }

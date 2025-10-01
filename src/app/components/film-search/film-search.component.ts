@@ -10,7 +10,7 @@ import { FilmComponent } from '../film/film.component'
   styleUrl: './film-search.component.scss'
 })
 export class FilmSearchComponent {
-  protected films: WritableSignal<Film[]> = signal<Film[]>([])
+  protected readonly films: WritableSignal<Film[]> = signal<Film[]>([])
 
   searchFilms(): void {
     this.films.set([
