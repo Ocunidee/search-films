@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, inject, signal, DestroyRef } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthenticationService } from '../../services/authentication.service'
@@ -16,6 +17,7 @@ export class LoginFormComponent {
   private readonly router = inject(Router)
   private readonly authenticationService = inject(AuthenticationService)
   private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly destroyRef = inject(DestroyRef)
 
   protected readonly title = signal('Authentication')
   protected readonly email = signal('')
@@ -26,6 +28,7 @@ export class LoginFormComponent {
   login() {
     this.errorMessage.set('')
     this.authenticationService.login(this.loginRequest())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
           const postLoginUrl = this.activatedRoute.snapshot.queryParamMap.get('returnUrl')
@@ -38,6 +41,7 @@ export class LoginFormComponent {
   register(): void {
     this.errorMessage.set('')
     this.authenticationService.register(this.loginRequest())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({ error: errorResponse => this.errorHandler(errorResponse) })
   }
 
