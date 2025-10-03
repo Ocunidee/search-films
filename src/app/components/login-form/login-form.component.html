@@ -8,5 +8,10 @@
   <label for="psw">Password</label>
   <input [(ngModel)]="password" type="password" placeholder="Enter your password" id="psw" name="password" required/>
 
-  <button type="submit">Login</button>
+  <small>{{errorMessage()}}</small>
+
+  <div class="button-container">
+    <button type="button" (click)="register()">Register</button>
+    <button type="submit">Login</button>
+  </div>
 </form>
