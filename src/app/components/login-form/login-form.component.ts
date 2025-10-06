@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, DestroyRef } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { FormsModule } from '@angular/forms'
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthenticationService } from '../../services/authentication.service'
 import { LoginRequest } from '../../models/authentication/login-request'
+import { password } from '../../utils/password.validator'
 
 @Component({
   selector: 'app-login-form',
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -18,12 +19,18 @@ export class LoginFormComponent {
   private readonly authenticationService = inject(AuthenticationService)
   private readonly activatedRoute = inject(ActivatedRoute)
   private readonly destroyRef = inject(DestroyRef)
+  private readonly fb = inject(NonNullableFormBuilder)
 
   protected readonly title = signal('Authentication')
   protected readonly email = signal('')
   protected readonly password = signal('')
   protected readonly errorMessage = signal('')
   protected readonly loginRequest = computed(() => new LoginRequest(this.email(), this.password()))
+
+  loginForm = this.fb.group({
+    email: ['', Validators.required],
+    password: ['', [Validators.required, password()]]
+  })
 
   login() {
     this.errorMessage.set('')
